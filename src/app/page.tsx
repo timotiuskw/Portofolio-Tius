@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Github, Linkedin, Mail, MapPin, Calendar, Code, Zap, Star, ArrowRight, Phone } from "lucide-react"
+import { Github, Linkedin, Mail, MapPin, Calendar, Code, Zap, Star, ArrowRight, Phone, ExternalLink } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import { useEffect, useState } from "react"
@@ -84,6 +84,15 @@ export default function Portfolio() {
       tech: ["Python", "OpenCV", "PyTorch", "YuNet", "SFace", "FER", "NumPy", "Matplotlib"],
       github: "#",
       image: "/images/FaceRecog.jpg",
+      featured: false,
+    },
+    {
+      title: "STI Kerja Praktek",
+      description:
+        "Contributed to building the Kerja Praktek module using Laravel to streamline course enrollment and student reporting. Currently leading the migration to Next.js to enhance performance and user experience.",
+      tech: ["Next.JS", "TypeScript", "Tailwind CSS"],
+      website: "https://sti.dinus.id",
+      image: "/images/STI.png",
       featured: false,
     },
   ]
@@ -307,9 +316,13 @@ export default function Portfolio() {
                     {project.title}
                     <div className="flex gap-2">
                       <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-purple-600/20" asChild>
-                        <Link href={project.github} target="_blank">
+                        <Link href={project.github || project.website || "#"} target="_blank">
+                        {project.website ? (
+                          <ExternalLink className="h-4 w-4" />
+                        ) : (
                           <Github className="h-4 w-4" />
-                        </Link>
+                        )}
+                      </Link>
                       </Button>
                     </div>
                   </CardTitle>
@@ -351,7 +364,7 @@ export default function Portfolio() {
                 className="bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-700 hover:to-cyan-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300"
                 asChild
               >
-                <Link href="mailto:tius@example.com">
+                <Link href="mailto:timotiusk9@gmail.com">
                   <Mail className="mr-2 h-5 w-5" />
                   Send Email
                 </Link>
