@@ -118,7 +118,6 @@ export default function Portfolio() {
                 T
               </AvatarFallback>
             </Avatar>
-            {/* Removed the green dot */}
           </div>
 
           <div className="space-y-4 mb-8">
@@ -227,8 +226,26 @@ export default function Portfolio() {
                     <div className="flex items-start gap-4">
                       <div className="w-4 h-4 bg-purple-500 rounded-full ring-4 ring-purple-500/20 flex-shrink-0 mt-1"></div>
                       <div>
+                        <h4 className="font-semibold text-white">Programmer Intern</h4>
+                        <p className="text-sm text-slate-400">PT Resin Plating Technology • Sep 2025 - Feb 2026</p>
+                        <p className="text-sm text-slate-300 mt-2">
+                          1. Engineered a Realtime Stock System with live inventory tracking and automated early warning alerts to reduce material shortages and improve stock control accuracy.
+                        </p>
+                        <p className="text-sm text-slate-300 mt-2">
+                          2. Developed a General Affairs Mobile App integrated with Google OCR to auto-fill license plate numbers from captured images for vehicle logging.
+                        </p>
+                        <p className="text-sm text-slate-300 mt-2">
+                          3. Built the ThreeD System, a secure enterprise data repository with email-based authentication and system-generated dynamic PIN verification to safeguard sensitive corporate information.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="relative">
+                    <div className="flex items-start gap-4">
+                      <div className="w-4 h-4 bg-cyan-500 rounded-full ring-4 ring-cyan-500/20 flex-shrink-0 mt-1"></div>
+                      <div>
                         <h4 className="font-semibold text-white">Frontend Developer</h4>
-                        <p className="text-sm text-slate-400">Bengkel Koding • Oct 2024 - Present</p>
+                        <p className="text-sm text-slate-400">Bengkel Koding • Oct 2024 - Dec 2026</p>
                         <p className="text-sm text-slate-300 mt-2">
                           Developed and re-designed Kerja Praktek module for STI (Sarjana Teknik Informatika) website using Next.js.
                         </p>
