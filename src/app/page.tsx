@@ -7,10 +7,74 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Github, Linkedin, Mail, MapPin, Calendar, Code, Zap, Star, ArrowRight, Phone, ExternalLink } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
+import { gsap } from "gsap"
+import { useGSAP } from "@gsap/react"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+import SplitType from "split-type"
+
+gsap.registerPlugin(ScrollTrigger, useGSAP)
 
 export default function Portfolio() {
   const [mounted, setMounted] = useState(false)
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  useGSAP(() => {
+    if (!mounted) return;
+
+    // 1. Hero Name Animation
+    const heroName = new SplitType('.hero-name', { types: 'chars' })
+    gsap.set(heroName.chars, { y: 50, opacity: 0 })
+    gsap.to(heroName.chars, {
+      y: 0,
+      opacity: 1,
+      stagger: 0.05,
+      duration: 0.8,
+      ease: 'back.out(1.7)',
+      delay: 0.2
+    })
+
+    // 2. Hero Description Animation
+    const heroDesc = new SplitType('.hero-desc', { types: 'lines' })
+    gsap.set(heroDesc.lines, { y: 20, opacity: 0 })
+    gsap.to(heroDesc.lines, {
+      y: 0,
+      opacity: 1,
+      stagger: 0.1,
+      duration: 0.8,
+      ease: 'power3.out',
+      delay: 1
+    })
+
+    // 3. Section Titles Scroll Animation
+    const sectionTitles = document.querySelectorAll('.section-title')
+    const splitTitles: SplitType[] = []
+
+    sectionTitles.forEach((title) => {
+      const splitTitle = new SplitType(title as HTMLElement, { types: 'chars' })
+      splitTitles.push(splitTitle)
+      
+      gsap.from(splitTitle.chars, {
+        scrollTrigger: {
+          trigger: title,
+          start: 'top 85%',
+          toggleActions: 'play none none reverse'
+        },
+        y: 50,
+        opacity: 0,
+        rotateX: -90,
+        stagger: 0.05,
+        duration: 0.8,
+        ease: 'back.out(1.7)',
+      })
+    })
+
+    return () => {
+      heroName.revert()
+      heroDesc.revert()
+      splitTitles.forEach(t => t.revert())
+    }
+  }, { scope: containerRef, dependencies: [mounted] })
 
   useEffect(() => {
     setMounted(true)
@@ -100,7 +164,7 @@ export default function Portfolio() {
   if (!mounted) return null
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+    <div ref={containerRef} className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
       {/* Animated Background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
@@ -121,9 +185,11 @@ export default function Portfolio() {
           </div>
 
           <div className="space-y-4 mb-8">
-            <h1 className="text-3xl md:text-5xl font-bold bg-gradient-to-r from-white via-purple-200 to-cyan-200 bg-clip-text text-transparent animate-fade-in">
-              Timotius Kelvin Winarto
-            </h1>
+            <div className="overflow-hidden pb-4">
+              <h1 className="hero-name text-3xl md:text-5xl font-bold text-white">
+                Timotius Kelvin Winarto
+              </h1>
+            </div>
             <div className="flex items-center justify-center gap-2 text-xl md:text-2xl text-purple-300">
               <Code className="w-6 h-6" />
               <span>Full Stack Developer</span>
@@ -131,7 +197,7 @@ export default function Portfolio() {
             </div>
           </div>
 
-          <p className="text-lg md:text-xl text-slate-300 max-w-3xl mx-auto mb-8 leading-relaxed">
+          <p className="hero-desc text-lg md:text-xl text-slate-300 max-w-3xl mx-auto mb-8 leading-relaxed">
             Passionate developer who loves creating{" "}
             <span className="text-purple-300 font-semibold">modern web applications</span>. I love turning ideas into
             reality through clean, efficient code and{" "}
@@ -185,11 +251,13 @@ export default function Portfolio() {
       </section>
 
       {/* About Section */}
-      <section className="relative container mx-auto px-4 py-20">
+      <section className="relative container mx-auto px-4 py-20 min-h-screen">
         <div className="relative z-10">
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent">
-            About Me
-          </h2>
+          <div className="overflow-hidden mb-16 pb-4">
+            <h2 className="section-title text-4xl md:text-5xl font-bold text-center text-purple-200">
+              About Me
+            </h2>
+          </div>
           <div className="grid lg:grid-cols-2 gap-16 items-center px-16">
             <div className="space-y-6">
               <p className="text-lg text-slate-300 leading-relaxed">
@@ -208,7 +276,7 @@ export default function Portfolio() {
                 </div>
                 <div className="flex items-center gap-3 text-slate-300">
                   <Calendar className="h-5 w-5 text-cyan-400" />
-                  <span>Available for freelance work</span>
+                  <span>Available for work</span>
                 </div>
               </div>
             </div>
@@ -272,9 +340,11 @@ export default function Portfolio() {
       {/* Skills Section */}
       <section className="relative container mx-auto px-4 py-20">
         <div className="relative z-10">
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 bg-gradient-to-r from-white to-cyan-200 bg-clip-text text-transparent">
-            Skills & Technologies
-          </h2>
+          <div className="overflow-hidden mb-16 pb-4">
+            <h2 className="section-title text-4xl md:text-5xl font-bold text-center text-cyan-200">
+              Skills & Technologies
+            </h2>
+          </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
             {skills.map((skill) => (
               <Card
@@ -305,9 +375,11 @@ export default function Portfolio() {
       {/* Projects Section */}
       <section id="projects" className="relative container mx-auto px-4 py-20">
         <div className="relative z-10">
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 p-2 bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent">
-            My Projects
-          </h2>
+          <div className="overflow-hidden mb-16 p-2 pb-4">
+            <h2 className="section-title text-4xl md:text-5xl font-bold text-center text-purple-200">
+              My Projects
+            </h2>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-16">
             {projects.map((project, index) => (
               <Card
@@ -367,9 +439,11 @@ export default function Portfolio() {
       {/* Contact Section */}
       <section id="contact" className="relative container mx-auto px-4 py-20">
         <div className="relative z-10">
-          <h2 className="text-4xl md:text-5xl font-bold p-2 text-center mb-16 bg-gradient-to-r from-white to-cyan-200 bg-clip-text text-transparent">
-            Let&apos;s Work Together
-          </h2>
+          <div className="overflow-hidden mb-16 p-2 pb-4">
+            <h2 className="section-title text-4xl md:text-5xl font-bold text-center text-cyan-200">
+              Let&apos;s Work Together
+            </h2>
+          </div>
           <div className="max-w-3xl mx-auto text-center">
             <p className="text-xl text-slate-300 mb-12 leading-relaxed">
               I&apos;m always interested in new opportunities and exciting projects. Let&apos;s create something{" "}
